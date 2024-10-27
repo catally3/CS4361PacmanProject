@@ -4,63 +4,67 @@ using UnityEngine;
 
 public class PacMan : MonoBehaviour
 {
-    const int totalPellets;             // Fill this in when board is finished
+    public int totalPellets;        // Fill in when the board is done      
 
+    // Constant variables for storing rotation directions for PacMan
+    private readonly Vector3 up = Vector3.forward;
+    private readonly Vector3 down = Vector3.back;
+    private readonly Vector3 left = Vector3.left;
+    private readonly Vector3 right = Vector3.right;
 
     public int remainingLives;          // If remainingLives is 0, game over
     public int remainingPellets;        // When remainingPellets is 0, game over
     public bool isPoweredUp;            // If isPoweredUp is true PacMan can eat ghosts
-    public Vector3 currentDirection;
+    public Vector3 currentDirection;    // PacMan constantly moves forward in this direction
+    public Vector3 nextDirection;       // Holds a movement direction from user input, waits for it to be valid
     
-
-    private static void MoveToStart(){
-        // Set these values to starting position, when board is finished
-        const int xStartPosition;
-        const int yStartPosition;
-        const int zStartPosition;
+    private void MoveToStart(){
+        // Fill in when board is finished
+        int xStartPosition = 0;
+        int yStartPosition = 0;
+        int zStartPosition = 0;
         
         transform.position = new Vector3(xStartPosition, yStartPosition, zStartPosition);
     }
     
-    private static void SetDirection(int zDirection){
-        currentDirection = new Vector3(transform.position.x, transform.position.y, zDirection);
-        transform.position = currentDirection;
+    private void SetDirection(Vector3 direction){
+        transform.LookAt(transform.position + direction);
     }
 
     // Initialize PacMan on game start
-    private static void InitializePacMan(){
+    private void InitializePacMan(){
         remainingLives = 3;
         remainingPellets = totalPellets;
-        isPowered = false;
+        isPoweredUp = false;
         MoveToStart();
-        SetDirection(0);
+        currentDirection = up;
+        SetDirection(currentDirection);
     }
 
     // Call when PacMan collides with a ghost and isPoweredUp is false 
     public void ResetPacMan(){
         remainingLives--;
-        isPowered = false;
+        isPoweredUp = false;
         MoveToStart();
-        SetDirection(0);
-    }
-    
-    // Call when PacMan collides with a wall
-    public void ReverseDirection(){
-
+        currentDirection = up; 
+        SetDirection(currentDirection);
     }
 
     // Call when PacMan collides with a pellet
     public void CollectPellet(){
         remainingPellets--;
     }
+    
+    // Thread for 10 second power up timer
+    private IEnumerator PowerUpTimer() {
+        isPoweredUp = true;
+        yield return new WaitForSeconds(10); 
+        isPoweredUp = false;
+    }
 
     // Call when PacMan collides with a power pellet
     public void PowerUp(){
-        isPoweredUp = true;
-        // start timer
-
-        // finish timer
-        isPoweredUp = false;
+        StartCoroutine(PowerUpTimer());
     }
     
     // Start is called before the first frame update
@@ -68,9 +72,31 @@ public class PacMan : MonoBehaviour
         InitializePacMan();
     }
 
+    // If there is no wall blocking PacMan from changing direction to nextDirection return true
+    private bool CanChangeDirection(){
+        // Detect walls in the direction for nextDirection
+        return false;    
+    }
+
     // Update is called once per frame
     void Update(){
-        // Update currentDirection when a movement key is pressed
-        // Move forward continuously
+        float movementSpeed = 3.0f;
+
+        if(currentDirection != nextDirection && CanChangeDirection()){
+            currentDirection = nextDirection;
+            SetDirection(currentDirection);
+        }
+
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
+            nextDirection = up;
+        } else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
+            nextDirection = left;
+        } else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
+            nextDirection = down;
+        } else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
+            nextDirection = right;
+        }
+            
+        transform.position += currentDirection * Time.deltaTime * movementSpeed;
     }
 }
