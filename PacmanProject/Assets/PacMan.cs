@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PacMan : MonoBehaviour
 {
-    public int totalPellets;        // Fill in when the board is done      
+    public int totalPellets = 20;        // Fill in when the board is done      
 
     // Constant variables for storing rotation directions for PacMan
     private readonly Vector3 up = Vector3.forward;
@@ -15,6 +15,7 @@ public class PacMan : MonoBehaviour
     public int remainingLives;          // If remainingLives is 0, game over
     public int remainingPellets;        // When remainingPellets is 0, game over
     public bool isPoweredUp;            // If isPoweredUp is true PacMan can eat ghosts
+    public bool canMoveForward;         
     public Vector3 currentDirection;    // PacMan constantly moves forward in this direction
     public Vector3 nextDirection;       // Holds a movement direction from user input, waits for it to be valid
     
@@ -27,36 +28,21 @@ public class PacMan : MonoBehaviour
         transform.position = new Vector3(xStartPosition, yStartPosition, zStartPosition);
     }
     
-    private void SetDirection(Vector3 direction){
-        transform.LookAt(transform.position + direction);
-    }
-
-    // Initialize PacMan on game start
+    // Initialize PacMan on game start or aftern death
     private void InitializePacMan(){
-        remainingLives = 3;
-        remainingPellets = totalPellets;
-        isPoweredUp = false;
         MoveToStart();
         currentDirection = up;
         SetDirection(currentDirection);
-    }
-
-    // Call when PacMan collides with a ghost and isPoweredUp is false 
-    public void ResetPacMan(){
-        remainingLives--;
         isPoweredUp = false;
-        MoveToStart();
-        currentDirection = up; 
-        SetDirection(currentDirection);
+        canMoveForward = true;
     }
 
-    // Call when PacMan collides with a pellet
     public void CollectPellet(){
         remainingPellets--;
     }
     
-    // Thread for 10 second power up timer
-    private IEnumerator PowerUpTimer() {
+    // Thread: 10 second power up timer
+    private IEnumerator PowerUpTimer(){
         isPoweredUp = true;
         yield return new WaitForSeconds(10); 
         isPoweredUp = false;
@@ -66,16 +52,42 @@ public class PacMan : MonoBehaviour
     public void PowerUp(){
         StartCoroutine(PowerUpTimer());
     }
-    
-    // Start is called before the first frame update
-    void Start(){
-        InitializePacMan();
+
+    private void SetCurrentDirection(Vector3 direction){
+        currentDirection = direction;
+        transform.LookAt(transform.position + currentDirection);
+    }
+
+    private void SetNextDirection(Vector3 direction){
+        nextDirection = direction;
     }
 
     // If there is no wall blocking PacMan from changing direction to nextDirection return true
     private bool CanChangeDirection(){
-        // Detect walls in the direction for nextDirection
+        // use RayCast to detect if there is a wall in the direction of nextDirection
         return false;    
+    }
+
+    // Collision Events
+    void OnCollisionEnter(Collision collision){
+        if(collision.gameObject.tag == "wall"){
+            canMoveForward = false;
+        } else if(collision.gameObject.tag == "pellet"){
+            CollectPellet();
+        } else if(collision.gameObject.tag == "power_pellet"){
+            CollectPellet();
+            PowerUp();
+        } else if(collision.gameObject.tag == "ghost" && !isPoweredUp){
+            remainingLives--;
+            InitializePacMan();
+        }
+    }
+
+    // Start is called before the first frame update
+    void Start(){
+        remainingLives = 3;
+        remainingPellets = totalPellets;
+        InitializePacMan();
     }
 
     // Update is called once per frame
@@ -83,20 +95,22 @@ public class PacMan : MonoBehaviour
         float movementSpeed = 3.0f;
 
         if(currentDirection != nextDirection && CanChangeDirection()){
-            currentDirection = nextDirection;
-            SetDirection(currentDirection);
+            SetCurrentDirection(nextDirection);
+            canMoveForward = true;
         }
 
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
-            nextDirection = up;
+            SetNextDirection(up);
         } else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
-            nextDirection = left;
+            SetNextDirection(left);
         } else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
-            nextDirection = down;
+            SetNextDirection(down);
         } else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
-            nextDirection = right;
+            SetNextDirection(right);
         }
-            
-        transform.position += currentDirection * Time.deltaTime * movementSpeed;
+        
+        if(canMoveForward == true) {
+            transform.position += currentDirection * Time.deltaTime * movementSpeed;
+        }
     }
 }
