@@ -2,16 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PacMan : MonoBehaviour
-{
-    public int totalPellets = 20;        // Fill in when the board is done      
+public class PacMan : MonoBehaviour{
+    private const Vector3 up = Vector3.forward;
+    private const Vector3 down = Vector3.back;
+    private const Vector3 left = Vector3.left;
+    private const Vector3 right = Vector3.right;
+    public const int totalPellets = 20;        // Fill in when the board is done      
 
-    // Constant variables for storing rotation directions for PacMan
-    private readonly Vector3 up = Vector3.forward;
-    private readonly Vector3 down = Vector3.back;
-    private readonly Vector3 left = Vector3.left;
-    private readonly Vector3 right = Vector3.right;
-
+    
     public int remainingLives;          // If remainingLives is 0, game over
     public int remainingPellets;        // When remainingPellets is 0, game over
     public bool isPoweredUp;            // If isPoweredUp is true PacMan can eat ghosts
@@ -64,8 +62,13 @@ public class PacMan : MonoBehaviour
 
     // If there is no wall blocking PacMan from changing direction to nextDirection return true
     private bool CanChangeDirection(){
-        // use RayCast to detect if there is a wall in the direction of nextDirection
-        return false;    
+        float raycastDistance = 5F;
+        LayerMask wallMask = LayerMask.GetMask("wall");
+
+        if(Physics.Raycast(transform.position, nextDirection, raycastDistance, wallMask))
+            return false;
+        
+        return true;    
     }
 
     // Collision Events
