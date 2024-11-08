@@ -21,7 +21,7 @@ public class PacMan : MonoBehaviour{
     private void MoveToStart(){
         // Fill in when board is finished
         int xStartPosition = 0;
-        int yStartPosition = 5;
+        int yStartPosition = 0;
         int zStartPosition = 0;
         
         transform.position = new Vector3(xStartPosition, yStartPosition, zStartPosition);
@@ -39,7 +39,7 @@ public class PacMan : MonoBehaviour{
     public void CollectPellet(){
         remainingPellets--;
         if(remainingPellets == 0){
-                // End Game
+            // End Game
         }
     }
     
