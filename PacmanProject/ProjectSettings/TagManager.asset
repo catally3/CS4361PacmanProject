@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Pacman
+  - wall
+  - pellet
+  - power_pellet
+  - ghost
   layers:
   - Default
   - TransparentFX
