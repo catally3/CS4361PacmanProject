@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PacMan : MonoBehaviour{
-    private Vector3 up = Vector3.forward;
-    private Vector3 down = Vector3.back;
-    private Vector3 left = Vector3.left;
-    private Vector3 right = Vector3.right;
-    public const int totalPellets = 20;        // Fill in when the board is done
-    public const int totalLives = 3;      
+    private const Vector3 up = Vector3.forward;
+    private const Vector3 down = Vector3.back;
+    private const Vector3 left = Vector3.left;
+    private const Vector3 right = Vector3.right;
+    public const int totalPellets = 20;        // Fill in when the board is done      
 
     
     public int remainingLives;          // If remainingLives is 0, game over
@@ -31,7 +30,7 @@ public class PacMan : MonoBehaviour{
     private void InitializePacMan(){
         MoveToStart();
         currentDirection = up;
-        SetCurrentDirection(currentDirection);
+        SetDirection(currentDirection);
         isPoweredUp = false;
         canMoveForward = true;
     }
@@ -66,7 +65,7 @@ public class PacMan : MonoBehaviour{
 
     // If there is no wall blocking PacMan from changing direction to nextDirection return true
     private bool CanChangeDirection(){
-        float raycastDistance = 5F;     // Needs testing
+        float raycastDistance = 5F;
         LayerMask wallMask = LayerMask.GetMask("wall");
 
         if(Physics.Raycast(transform.position, nextDirection, raycastDistance, wallMask))
@@ -86,24 +85,20 @@ public class PacMan : MonoBehaviour{
             PowerUp();
         } else if(collision.gameObject.tag == "ghost" && !isPoweredUp){
             remainingLives--;
-            if(remainingLives == 0){
-                // End game
-            } else{
-                InitializePacMan();
-            }
+            InitializePacMan();
         }
     }
 
     // Start is called before the first frame update
     void Start(){
-        remainingLives = totalLives;
+        remainingLives = 3;
         remainingPellets = totalPellets;
         InitializePacMan();
     }
 
     // Update is called once per frame
     void Update(){
-        float movementSpeed = 5.0f;
+        float movementSpeed = 3.0f;
 
         if(currentDirection != nextDirection && CanChangeDirection()){
             SetCurrentDirection(nextDirection);
