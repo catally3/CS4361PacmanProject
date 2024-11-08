@@ -37,6 +37,9 @@ public class PacMan : MonoBehaviour{
 
     public void CollectPellet(){
         remainingPellets--;
+        if(remainingPellets == 0){
+            // End Game
+        }
     }
     
     // Thread: 10 second power up timer
