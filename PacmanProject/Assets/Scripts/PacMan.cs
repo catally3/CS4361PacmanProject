@@ -21,7 +21,7 @@ public class PacMan : MonoBehaviour{
     private void MoveToStart(){
         // Fill in when board is finished
         int xStartPosition = 0;
-        int yStartPosition = 0;
+        int yStartPosition = 5;
         int zStartPosition = 0;
         
         transform.position = new Vector3(xStartPosition, yStartPosition, zStartPosition);
@@ -31,7 +31,7 @@ public class PacMan : MonoBehaviour{
     private void InitializePacMan(){
         MoveToStart();
         currentDirection = up;
-        SetDirection(currentDirection);
+        SetCurrentDirection(currentDirection);
         isPoweredUp = false;
         canMoveForward = true;
     }
@@ -66,14 +66,18 @@ public class PacMan : MonoBehaviour{
 
     // If there is no wall blocking PacMan from changing direction to nextDirection return true
     private bool CanChangeDirection(){
-        float raycastDistance = 5F;
+        float raycastDistance = 50f;
         LayerMask wallMask = LayerMask.GetMask("wall");
 
-        if(Physics.Raycast(transform.position, nextDirection, raycastDistance, wallMask))
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, nextDirection, out hit, raycastDistance, wallMask)){
             return false;
-        
-        return true;    
+        }
+
+        Debug.DrawRay(transform.position, nextDirection * raycastDistance, Color.red, 10f);
+        return true;
     }
+
 
     // Collision Events
     void OnCollisionEnter(Collision collision){
