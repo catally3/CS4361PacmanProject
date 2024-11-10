@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PacMan : MonoBehaviour{
-    private const Vector3 up = Vector3.forward;
-    private const Vector3 down = Vector3.back;
-    private const Vector3 left = Vector3.left;
-    private const Vector3 right = Vector3.right;
-    public const int totalPellets = 20;        // Fill in when the board is done      
+    private Vector3 up = Vector3.forward;
+    private Vector3 down = Vector3.back;
+    private Vector3 left = Vector3.left;
+    private Vector3 right = Vector3.right;
+    public const int totalPellets = 20;        // Fill in when the board is done  
+    public const int totalLives = 3;    
 
     
     public int remainingLives;          // If remainingLives is 0, game over
@@ -37,6 +38,9 @@ public class PacMan : MonoBehaviour{
 
     public void CollectPellet(){
         remainingPellets--;
+        if(remainingLives == 0){
+            // game won
+        }
     }
     
     // Thread: 10 second power up timer
@@ -82,20 +86,25 @@ public class PacMan : MonoBehaviour{
             PowerUp();
         } else if(collision.gameObject.tag == "ghost" && !isPoweredUp){
             remainingLives--;
+
+            if(remainingLives == 0){
+                // end game
+            }
+
             InitializePacMan();
         }
     }
 
     // Start is called before the first frame update
     void Start(){
-        remainingLives = 3;
+        remainingLives = totalLives;
         remainingPellets = totalPellets;
         InitializePacMan();
     }
 
     // Update is called once per frame
     void Update(){
-        float movementSpeed = 3.0f;
+        float movementSpeed = 5.0f;
 
         if(currentDirection != nextDirection && CanChangeDirection()){
             SetCurrentDirection(nextDirection);
