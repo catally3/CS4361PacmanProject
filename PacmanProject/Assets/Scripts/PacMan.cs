@@ -66,18 +66,16 @@ public class PacMan : MonoBehaviour{
 
     // If there is no wall blocking PacMan from changing direction to nextDirection return true
     private bool CanChangeDirection(){
-        float raycastDistance = 50f;
-        LayerMask wallMask = LayerMask.GetMask("wall");
+         Vector3 backPosition = transform.position - transform.forward * 5.0f;
+        float raycastDistance = 10f;
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, nextDirection, out hit, raycastDistance, wallMask)){
+        if (Physics.Raycast(backPosition, nextDirection, out hit, raycastDistance) && hit.transform.CompareTag("wall")) {
             return false;
         }
 
-        Debug.DrawRay(transform.position, nextDirection * raycastDistance, Color.red, 10f);
         return true;
     }
-
 
     // Collision Events
     void OnCollisionEnter(Collision collision){
