@@ -9,12 +9,12 @@ public class Pellet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collison)
     {
-        if (collison.gameObject.CompareTag("Pacman"))
+        if (collison.gameObject.CompareTag("pacman"))
         {
             // Add score to the game manager
             GameManager.instance.AddScore(scoreValue);
             // Destroy the pellet
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
     }
 }

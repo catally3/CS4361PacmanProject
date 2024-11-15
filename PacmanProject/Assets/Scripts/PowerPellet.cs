@@ -10,7 +10,7 @@ public class PowerPellet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collison)
     {
-        if (collison.gameObject.CompareTag("Pacman")) { 
+        if (collison.gameObject.CompareTag("pacman")) { 
             // Add score to the game manager
             GameManager.instance.AddScore(scoreValue);
 
@@ -18,7 +18,7 @@ public class PowerPellet : MonoBehaviour
             GameManager.instance.ActivatePowerMode(powerDuration);
 
             // Destroy the power pellet
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
     }
 }
