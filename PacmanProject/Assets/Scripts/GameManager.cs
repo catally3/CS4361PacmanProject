@@ -1,21 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public bool isPowerModeActive = false;
     public float powerModeEndTime;
-    public int score = 0;
+    private int score;
+    private Text scoreText;
+
+    public void Start()
+    {
+        scoreText = GetComponent<Text>();
+        score = 0;
+    }
 
     private void Awake()
     {
-        instance = this;
+        // Ensure only one instance exists
+        if (instance == null)
+        {
+            instance = this;
+            //DontDestroyOnLoad(gameObject); // Optional: Persist across scenes
+        }
+        else
+        {
+            Debug.LogWarning("Duplicate GameManager detected and destroyed.");
+            Destroy(gameObject);
+        }
     }
 
     public void AddScore(int value) {
         this.score += value;
+        scoreText.text = "Score: " + this.score;
     }
 
     public void ActivatePowerMode(float duration)

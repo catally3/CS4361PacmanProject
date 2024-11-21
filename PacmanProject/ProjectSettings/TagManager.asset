@@ -9,6 +9,7 @@ TagManager:
   - pellet
   - power_pellet
   - wall
+  - text
   layers:
   - Default
   - TransparentFX
