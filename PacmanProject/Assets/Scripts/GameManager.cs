@@ -36,7 +36,6 @@ public class GameManager : MonoBehaviour
         this.score += value;
         scoreText.text = "Score: " + this.score;
     }
-
     public void ActivatePowerMode(float duration)
     {
         isPowerModeActive = true;

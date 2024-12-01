@@ -5,8 +5,9 @@ using UnityEngine;
 public class Ghost : MonoBehaviour
 {
 
-    public void SetFrightenedMode(bool set) { 
-    
+    public void SetFrightenedMode(bool set)
+    {
+
     }
 
     // Start is called before the first frame update
