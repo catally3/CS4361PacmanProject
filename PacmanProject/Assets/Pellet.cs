@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Pellet : MonoBehaviour
 {
+    private int scoreValue = 10;
+
     // When Pac-Man collides with a pellet
     void OnTriggerEnter(Collider other)
     {
@@ -12,6 +14,7 @@ public class Pellet : MonoBehaviour
             Destroy(gameObject);
 
             // Call a function to update the pellet count in PacMan script 
+            GameManager.instance.AddScore(scoreValue);
         }
     }
 }

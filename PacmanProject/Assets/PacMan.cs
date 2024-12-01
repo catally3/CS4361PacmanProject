@@ -48,10 +48,16 @@ public class BasicPacManMovement : MonoBehaviour
         {
             remainingPellets--;
             Destroy(other.gameObject);
-            if (remainingPellets <= 0) Debug.Log("You collected all the pellets! You win!");
+
+            if (remainingPellets <= 0)
+            {
+                Debug.Log("You collected all the pellets! You win!");
+                GameManager.instance.gameWin();
+            }
         }
         else if (other.CompareTag("power_pellet"))
         {
+            GameManager.instance.AddScore(50);
             ActivatePowerUp();
             Destroy(other.gameObject);
         }
@@ -61,6 +67,7 @@ public class BasicPacManMovement : MonoBehaviour
             {
                 // Pac-Man eats the ghost
                 Debug.Log("Pac-Man ate a ghost!");
+                GameManager.instance.AddScore(100);
                 Destroy(other.gameObject);
             }
             else
@@ -95,7 +102,7 @@ public class BasicPacManMovement : MonoBehaviour
         if (lives <= 0)
         {
             Debug.Log("Game Over!");
-            Time.timeScale = 0f;  // Pauses the game
+            GameManager.instance.gameOver();
         }
         else
         {
