@@ -17,14 +17,12 @@ public class BasicPacManMovement : MonoBehaviour
     public int lives = 3;  // Number of lives Pac-Man has
     private Vector3 startPosition;
 
-    void Start()
-    {
+    void Start(){
         currentDirection = up;
         startPosition = transform.position;
     }
 
-    void Update()
-    {
+    void Update(){
         // Handle user input to change direction
         if (Input.GetKeyDown(KeyCode.UpArrow)) currentDirection = up;
         else if (Input.GetKeyDown(KeyCode.DownArrow)) currentDirection = down;
@@ -35,68 +33,59 @@ public class BasicPacManMovement : MonoBehaviour
         transform.position += currentDirection * moveSpeed * Time.deltaTime;
 
         // Rotate Pac-Man to face the current direction
-        if (currentDirection != Vector3.zero)
-        {
+        if (currentDirection != Vector3.zero){
             Quaternion targetRotation = Quaternion.LookRotation(currentDirection);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * moveSpeed);
         }
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("pellet"))
-        {
+    void OnTriggerEnter(Collider other){
+        if (other.CompareTag("pellet")){
             remainingPellets--;
             Destroy(other.gameObject);
 
-            if (remainingPellets <= 0)
-            {
+            if (remainingPellets <= 0){
                 Debug.Log("You collected all the pellets! You win!");
-                GameManager.instance.gameWin();
+                GameManager.instance.gameWin();             // Game won screen
             }
         }
-        else if (other.CompareTag("power_pellet"))
-        {
+        else if (other.CompareTag("power_pellet")){
             GameManager.instance.AddScore(50);
             ActivatePowerUp();
             Destroy(other.gameObject);
         }
-        else if (other.CompareTag("ghost"))
-        {
-            if (isPoweredUp)
-            {
+        else if (other.CompareTag("ghost")){
+            if (isPoweredUp){
                 // Pac-Man eats the ghost
                 Debug.Log("Pac-Man ate a ghost!");
                 GameManager.instance.AddScore(100);
                 Destroy(other.gameObject);
             }
-            else
-            {
+            else{
                 // Pac-Man loses a life
                 LoseLife();
+                if(lives <= 0){
+                    GameManager.instance.gameOver();                // Game over screen
+                }
             }
         }
     }
 
-    void ActivatePowerUp()
-    {
-        if (!isPoweredUp)
-        {
+    void ActivatePowerUp(){
+        if (!isPoweredUp){
             isPoweredUp = true;
             Debug.Log("Power-up activated!");
             StartCoroutine(PowerUpTimer());
         }
     }
 
-    private IEnumerator PowerUpTimer()
-    {
+    private IEnumerator PowerUpTimer(){
         yield return new WaitForSeconds(powerUpDuration);
         isPoweredUp = false;
         Debug.Log("Power-up ended.");
     }
 
-    public void LoseLife()
-    {
+    public void LoseLife(){
         Debug.Log("Pac-Man lost a life.");
         lives--;
         if (lives <= 0)
