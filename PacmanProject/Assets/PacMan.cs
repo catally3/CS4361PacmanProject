@@ -33,16 +33,13 @@ public class BasicPacManMovement : MonoBehaviour
         transform.position += currentDirection * moveSpeed * Time.deltaTime;
 
         // Rotate Pac-Man to face the current direction
-        if (currentDirection != Vector3.zero){
-            Quaternion targetRotation = Quaternion.LookRotation(currentDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * moveSpeed);
-        }
+        Quaternion targetRotation = Quaternion.LookRotation(currentDirection);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * moveSpeed);
     }
 
     void OnTriggerEnter(Collider other){
         if (other.CompareTag("pellet")){
             remainingPellets--;
-            Destroy(other.gameObject);
 
             if (remainingPellets <= 0){
                 Debug.Log("You collected all the pellets! You win!");
@@ -52,18 +49,15 @@ public class BasicPacManMovement : MonoBehaviour
         else if (other.CompareTag("power_pellet")){
             GameManager.instance.AddScore(50);
             ActivatePowerUp();
-            Destroy(other.gameObject);
         }
         else if (other.CompareTag("ghost")){
             if (isPoweredUp){
                 // Pac-Man eats the ghost
                 Debug.Log("Pac-Man ate a ghost!");
                 GameManager.instance.AddScore(100);
-                Destroy(other.gameObject);
-            }
-            else{
+            } else{
                 // Pac-Man loses a life
-                LoseLife();
+                //LoseLife();
             }
         }
     }
@@ -88,9 +82,8 @@ public class BasicPacManMovement : MonoBehaviour
         if (lives <= 0){
             Debug.Log("Game Over!");
             GameManager.instance.gameOver();        // Game over screen
-        }
-        else{
-            transform.position = startPosition;  // Respawn Pac-Man
+        } else{
+            transform.position = startPosition;     // Respawn Pac-Man
         }
     }
 }
