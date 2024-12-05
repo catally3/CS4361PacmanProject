@@ -14,7 +14,7 @@ public class BasicPacManMovement : MonoBehaviour
     public bool isPoweredUp = false;
     public float powerUpDuration = 10f;
 
-    public int lives = 3;               // Number of lives Pac-Man has
+    public int lives = 3;  // Number of lives Pac-Man has
     private Vector3 startPosition;
 
     void Start(){
@@ -64,6 +64,9 @@ public class BasicPacManMovement : MonoBehaviour
             else{
                 // Pac-Man loses a life
                 LoseLife();
+                if(lives <= 0){
+                    GameManager.instance.gameOver();                // Game over screen
+                }
             }
         }
     }
@@ -85,11 +88,13 @@ public class BasicPacManMovement : MonoBehaviour
     public void LoseLife(){
         Debug.Log("Pac-Man lost a life.");
         lives--;
-        if (lives <= 0){
+        if (lives <= 0)
+        {
             Debug.Log("Game Over!");
-            GameManager.instance.gameOver();        // Game over screen
+            GameManager.instance.gameOver();
         }
-        else{
+        else
+        {
             transform.position = startPosition;  // Respawn Pac-Man
         }
     }
