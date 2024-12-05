@@ -57,7 +57,7 @@ public class BasicPacManMovement : MonoBehaviour
                 GameManager.instance.AddScore(100);
             } else{
                 // Pac-Man loses a life
-                //LoseLife();
+                LoseLife();
             }
         }
     }

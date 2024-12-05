@@ -7,7 +7,7 @@ public class GhostMovement : MonoBehaviour
     private BasicPacManMovement pacManScript;
     public Transform pacMan;
     public float fleeDistance = 10f;
-    public float detectionRadius = 0.001f; 
+    public float detectionRadius = 0.001f;
     private bool isFleeing = false;
 
     void Start()
@@ -15,7 +15,7 @@ public class GhostMovement : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         pacMan = GameObject.FindWithTag("player").transform;
         pacManScript = pacMan.GetComponent<BasicPacManMovement>();
-        
+
 
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null) rb.isKinematic = true;
@@ -38,7 +38,8 @@ public class GhostMovement : MonoBehaviour
             ChasePacMan();
         }
 
-        if (isFleeing) {
+        if (isFleeing)
+        {
             System.Collections.Generic.List<Material> materials = new System.Collections.Generic.List<Material>();
             this.gameObject.GetComponent<SkinnedMeshRenderer>().GetMaterials(materials);
             materials[0].SetColor(Shader.PropertyToID(name), new Color(0, 37, 204));
@@ -77,3 +78,4 @@ public class GhostMovement : MonoBehaviour
             }
         }
     }
+}
