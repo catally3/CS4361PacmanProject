@@ -69,6 +69,7 @@ public class GhostMovement : MonoBehaviour
             if (pacManScript.isPoweredUp)
             {
                 Debug.Log("Pac-Man ate a ghost!");
+                GameManager.instance.AddScore(100);
                 Destroy(gameObject);  // Remove the ghost
             }
             else
