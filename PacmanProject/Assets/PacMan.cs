@@ -63,14 +63,7 @@ public class BasicPacManMovement : MonoBehaviour
         }
         else if (other.CompareTag("ghost"))
         {
-            if (isPoweredUp)
-            {
-                // Pac-Man eats the ghost
-                Debug.Log("Pac-Man ate a ghost!");
-                GameManager.instance.AddScore(100);
-                Destroy(other.gameObject);
-            }
-            else
+            if (!isPoweredUp)
             {
                 // Pac-Man loses a life
                 LoseLife();
