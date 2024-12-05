@@ -38,6 +38,8 @@ public class BasicPacManMovement : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider other){
+        Debug.Log(other.tag);
+
         if (other.CompareTag("pellet")){
             remainingPellets--;
 

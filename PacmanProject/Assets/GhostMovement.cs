@@ -7,7 +7,7 @@ public class GhostMovement : MonoBehaviour
     private BasicPacManMovement pacManScript;
     public Transform pacMan;
     public float fleeDistance = 10f;
-    public float detectionRadius = 0.001f;
+    public float detectionRadius = 0.1f;
     private bool isFleeing = false;
 
     void Start()
@@ -62,7 +62,7 @@ public class GhostMovement : MonoBehaviour
 
     void DetectPacMan()
     {
-        float distanceToPacMan = Vector3.Distance(transform.position, pacMan.position);
+        float distanceToPacMan = Vector3.Distance(this.transform.position, pacMan.position);
 
         if (distanceToPacMan <= detectionRadius)
         {

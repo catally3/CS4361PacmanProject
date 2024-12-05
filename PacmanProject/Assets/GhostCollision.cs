@@ -16,7 +16,6 @@ public class GhostCollision : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.tag);
         if (other.CompareTag("player"))
         {
             if (pacManScript.isPoweredUp)
